@@ -32,7 +32,7 @@
           <div class="date">{{ getDate(day.dt) }}</div>
           <div class="temp">{{ Math.round(day.main.temp) }}°C</div>
           <div class="weather">{{ day.weather[0].main }}</div>
-        </div>
+          <img :src="getWeatherIcon(day.weather[0].main)" alt="Weather Icon" class="weather-icon">        </div>
       </div>
       </div>
     </main>
@@ -52,6 +52,25 @@ export default {
     }
   },
   methods: {
+    getWeatherIcon(weatherCondition) {
+      let icon = '';
+      switch (weatherCondition.toLowerCase()) {
+        case 'clear':
+          icon = require('./assets/sunny.svg');
+          break;
+        case 'clouds':
+          icon = require('./assets/cloudy.svg');
+          break;
+        case 'rain':
+          icon = require('./assets/rainy.svg');
+          break;
+        // Add cases for other weather conditions as needed
+        default:
+          break;
+      }
+      return icon;
+    },
+  
     fetchWeather(e) {
       if (e.key === "Enter") {
         // Fetch current weather
@@ -95,7 +114,8 @@ export default {
     getDate(timestamp) {
       const date = new Date(timestamp * 1000);
       return `${date.getDate()}/${date.getMonth() + 1}`;
-    }
+    },
+    
   },
   computed: {
   nextFiveDays() {
@@ -275,6 +295,12 @@ main {
 .weather {
   font-size: 16px;
   color: #6c757d;
+}
+
+.weather-icon {
+  width: 50px; /* Adjust width and height as needed */
+  height: 50px;
+  background-size: cover; /* Ensure the background image covers the container */
 }
 
 </style>
